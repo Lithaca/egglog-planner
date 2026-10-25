@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "catalog": [
+    {"name":"a","rows":10000,"columns":[{"name":"id","type":"int"},{"name":"bid","type":"int"}]},
+    {"name":"b","rows":1000,"columns":[{"name":"id","type":"int"},{"name":"cid","type":"int"}]},
+    {"name":"c","rows":10,"columns":[{"name":"id","type":"int"}]}
+  ],
+  "plan": {"op":"Project","columns":["a.id","b.id","c.id"],"input":
+    {"op":"Join","predicate":{"kind":"eq_cols","left":"b.cid","right":"c.id","selectivity":0.01},"left":
+      {"op":"Join","predicate":{"kind":"eq_cols","left":"a.bid","right":"b.id","selectivity":0.001},"left":{"op":"Scan","relation":"a"},"right":{"op":"Scan","relation":"b"}},
+      "right":{"op":"Scan","relation":"c"}
+    }
+  }
+}

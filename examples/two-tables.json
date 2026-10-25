@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "catalog": [
+    {"name":"orders","rows":10000,"columns":[{"name":"id","type":"int"},{"name":"customer_id","type":"int"},{"name":"status","type":"string"}]},
+    {"name":"customers","rows":100,"columns":[{"name":"id","type":"int"},{"name":"name","type":"string"}]}
+  ],
+  "plan": {"op":"Project","columns":["orders.id","customers.name"],"input":
+    {"op":"Filter","predicate":{"kind":"eq_const","left":"orders.status","value":"open","value_type":"string","selectivity":0.01},"input":
+      {"op":"Join","predicate":{"kind":"eq_cols","left":"orders.customer_id","right":"customers.id","selectivity":0.01},"left":{"op":"Scan","relation":"orders"},"right":{"op":"Scan","relation":"customers"}}
+    }
+  }
+}

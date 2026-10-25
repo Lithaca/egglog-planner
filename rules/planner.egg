@@ -1,0 +1,9 @@
+(datatype Plan (Scan String) (Filter String Plan) (Project String Plan) (Join String Plan Plan))
+(constructor Root (Plan) Plan)
+; Broad algebraic exploration. Go validates column bindings, predicate multiset,
+; bag semantics and root output order before accepting any extracted candidate.
+(rewrite (Join p a b) (Join p b a))
+(rewrite (Filter p (Join j a b)) (Join j (Filter p a) b))
+(rewrite (Filter p (Join j a b)) (Join j a (Filter p b)))
+(rewrite (Join q (Join p a b) c) (Join p a (Join q b c)))
+(rewrite (Join p a (Join q b c)) (Join q (Join p a b) c))
